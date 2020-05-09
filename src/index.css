@@ -28,8 +28,9 @@
   margin-bottom: 20px;
 }
 .collection .collection-item img {
-  width: 150px;
+  width: 250px;
   margin-right: 25px;
+  margin-left: -55px;
 }
 .item-desc {
   align-self: center;
@@ -51,4 +52,30 @@
 
 .btn-floating.halfway-fab {
   bottom: -85px;
+}
+
+.material-icons.quantity {
+  font-size: 25px;
+  padding-right: 32px;
+}
+.add-remove {
+  width: max-content;
+}
+
+.collection .collection-item.avatar .title {
+  font-size: 1em;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media (max-width: 600px) {
+  .collection .collection-item.avatar {
+    min-height: 84px;
+    padding-left: 2px;
+  }
+
+  .collection .collection-item img {
+    width: 200px;
+    margin-right: 23px;
+    margin-left: 0px;
+  }
 }

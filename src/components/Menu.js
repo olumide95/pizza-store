@@ -18,6 +18,9 @@ class Menu extends Component {
               <span
                 to="/"
                 className="btn-floating halfway-fab waves-effect waves-light red"
+                onClick={() => {
+                  this.handleClick(item.id);
+                }}
               >
                 <i className="material-icons">add</i>
               </span>
@@ -61,4 +64,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

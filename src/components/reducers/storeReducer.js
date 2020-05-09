@@ -3,8 +3,8 @@ import axios from "axios";
 
 const defaultState = {
   items: {},
-  cartItems: [],
-  total: 0,
+  cartItems: localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [],
+  total: localStorage.total ? parseInt(localStorage.total) : 0,
   store_info: {},
   isDataInitialized: false,
 };
@@ -21,22 +21,35 @@ const storeReducer = (state = defaultState, action) => {
 
     case "ADD_TO_CART":
       let cartItems = state.items.find((item) => item.id === action.id);
-      //check if the action id exists in the cartItemss
-      let existed_item = state.cartItemss.find((item) => action.id === item.id);
+
+      //check if the action id exists in the cartItems
+      let existed_item = state.cartItems.find((item) => action.id === item.id);
       if (existed_item) {
-        cartItems.quantity += 1;
+        existed_item.quantity += 1;
+        localStorage.cartItems = [JSON.stringify(state.cartItems)];
+        localStorage.total = state.total + cartItems.amount;
         return {
           ...state,
-          total: state.total + cartItems.price,
+          total: state.total + cartItems.amount,
         };
       } else {
         cartItems.quantity = 1;
         //calculating the total
-        let newTotal = state.total + cartItems.price;
+        let newTotal = state.total + cartItems.amount;
 
+        if (state.cartItems.length !== 0) {
+          localStorage.cartItems = JSON.stringify([
+            ...state.cartItems,
+            cartItems,
+          ]);
+        } else {
+          localStorage.cartItems = [JSON.stringify(cartItems)];
+        }
+
+        localStorage.total = newTotal;
         return {
           ...state,
-          cartItemss: [...state.cartItemss, cartItems],
+          cartItems: [...state.cartItems, cartItems],
           total: newTotal,
         };
       }

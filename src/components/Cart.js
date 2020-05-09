@@ -8,24 +8,27 @@ class Cart extends Component {
         return (
           <li className="collection-item avatar" key={item.id}>
             <div className="item-img">
-              <img src={item.img} alt={item.img} className="" />
+              <img src={item.image} alt={item.img} className="" />
             </div>
 
             <div className="item-desc">
-              <span className="title">{item.title}</span>
+              <span className="title">{item.name}</span>
               <p>{item.desc}</p>
               <p>
-                <b>Price: {item.price}$</b>
+                <b>Price: {item.amount}$</b>
               </p>
               <p>
                 <b>Quantity: {item.quantity}</b>
               </p>
               <div className="add-remove">
                 <Link to="/cart">
-                  <i className="material-icons">arrow_drop_up</i>
+                  <i className="material-icons quantity">add_circle_outline</i>
                 </Link>
+
                 <Link to="/cart">
-                  <i className="material-icons">arrow_drop_down</i>
+                  <i className="material-icons quantity">
+                    remove_circle_outline
+                  </i>
                 </Link>
               </div>
               <button className="waves-effect waves-light btn pink remove">
