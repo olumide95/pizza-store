@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { addToCart } from "./Actions/cartActions";
 
 class Menu extends Component {
+  handleClick = (id) => {
+    this.props.addToCart(id);
+  };
+
   render() {
     const itemList = () => {
       return this.props.items.map((item) => {
@@ -45,6 +50,14 @@ const mapStateToProps = (state) => {
   return {
     items: state.items,
     isDataInitialized: state.isDataInitialized,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (id) => {
+      dispatch(addToCart(id));
+    },
   };
 };
 
