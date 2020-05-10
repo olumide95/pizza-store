@@ -29,11 +29,9 @@
 }
 .collection .collection-item img {
   width: 250px;
+  height: 150px;
   margin-right: 25px;
   margin-left: -55px;
-}
-.item-desc {
-  align-self: center;
 }
 
 .custom-rounded {
@@ -85,4 +83,9 @@
 .progress {
   margin-top: 0px;
   background-color: #c62828b5 !important;
+}
+
+.collection-item.avatar .title.confirmed {
+  font-size: 1.2em;
+  margin-bottom: 50px;
 }

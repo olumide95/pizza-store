@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Cart from "./components/Cart";
+import ConfirmOrder from "./components/ConfirmOrder";
 import { getInitalData } from "./components/reducers/storeReducer.js";
 import { connect } from "react-redux";
 
@@ -19,6 +20,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Menu} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path="/confirm-order" component={ConfirmOrder} />
           </Switch>
         </div>
       </Router>

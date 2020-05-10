@@ -1,23 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import {
-  removeItem,
-  addQuantity,
-  subtractQuantity,
-} from "./Actions/cartActions";
-class Cart extends Component {
+import { Link, Redirect } from "react-router-dom";
+import { takeOrder } from "./Actions/storeActions";
+class confirmOrder extends Component {
   //to remove the item completely
-  handleRemove = (uuid) => {
-    this.props.removeItem(uuid);
-  };
-  //to add the quantity
-  handleAddQuantity = (uuid) => {
-    this.props.addQuantity(uuid);
-  };
-  //to substruct from the quantity
-  handleSubtractQuantity = (uuid) => {
-    this.props.subtractQuantity(uuid);
+  handletakeOrder = () => {
+    this.props.takeOrder();
   };
   render() {
     let cartItems = this.props.items.length ? (
@@ -29,7 +17,7 @@ class Cart extends Component {
             </div>
 
             <div className="item-desc">
-              <span className="title">{item.name}</span>
+              <span className="title confirmed">{item.name}</span>
               <p>{item.desc}</p>
               <p>
                 <b>Price: €{item.amount}</b>
@@ -37,43 +25,12 @@ class Cart extends Component {
               <p>
                 <b>Quantity: {item.quantity}</b>
               </p>
-              <div className="add-remove">
-                <Link to="/cart">
-                  <i
-                    className="material-icons quantity"
-                    onClick={() => {
-                      this.handleAddQuantity(item.uuid);
-                    }}
-                  >
-                    add_circle_outline
-                  </i>
-                </Link>
-
-                <Link to="/cart">
-                  <i
-                    className="material-icons quantity"
-                    onClick={() => {
-                      this.handleSubtractQuantity(item.uuid);
-                    }}
-                  >
-                    remove_circle_outline
-                  </i>
-                </Link>
-              </div>
-              <button
-                className="waves-effect waves-light btn pink remove"
-                onClick={() => {
-                  this.handleRemove(item.uuid);
-                }}
-              >
-                Remove
-              </button>
             </div>
           </li>
         );
       })
     ) : (
-      <p> Your Cart is Empty</p>
+      <Redirect to="/cart" />
     );
 
     let costTable = this.props.items.length ? (
@@ -90,11 +47,6 @@ class Cart extends Component {
           <li className="collection-item">
             <b>Total ($): {this.props.total_USD}</b>
           </li>
-        </div>
-        <div className="checkout">
-          <Link to="/confirm-order">
-            <button className="waves-effect waves-light btn">Checkout</button>
-          </Link>
         </div>
       </div>
     ) : (
@@ -137,11 +89,16 @@ class Cart extends Component {
       <div className="container">
         <div className="cart">
           <h5>
-            <b>Cart:</b>
+            <b>Confirm Your Order:</b>
+            <Link to="/cart" style={{ float: "right", "font-size": "0.7em" }}>
+              Edit Order
+            </Link>
           </h5>
           <ul className="collection">{cartItems}</ul>
         </div>
         {costTable}
+
+        {deliveryDetails}
       </div>
     );
   }
@@ -161,15 +118,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeItem: (uuid) => {
-      dispatch(removeItem(uuid));
-    },
-    addQuantity: (uuid) => {
-      dispatch(addQuantity(uuid));
-    },
-    subtractQuantity: (uuid) => {
-      dispatch(subtractQuantity(uuid));
+    takeOrder: () => {
+      dispatch(takeOrder());
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(confirmOrder);
