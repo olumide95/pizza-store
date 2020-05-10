@@ -66,7 +66,7 @@ class Cart extends Component {
                   this.handleRemove(item.uuid);
                 }}
               >
-                Remove
+                Remove{""}
               </button>
             </div>
           </li>
@@ -93,7 +93,10 @@ class Cart extends Component {
         </div>
         <div className="checkout">
           <Link to="/confirm-order">
-            <button className="waves-effect waves-light btn">Checkout</button>
+            <button className="waves-effect waves-light btn-large red darken-3">
+              Checkout
+              <i className="material-icons right">send</i>
+            </button>
           </Link>
         </div>
       </div>
@@ -101,38 +104,6 @@ class Cart extends Component {
       ""
     );
 
-    let deliveryDetails = this.props.items.length ? (
-      <div className="row">
-        <form className="col s12">
-          <h5>
-            <b>Delivery Information</b>
-          </h5>
-          <div className="row">
-            <div className="input-field col s6">
-              <input id="name" type="text" className="validate" />
-              <label htmlFor="name">Full Name</label>
-            </div>
-
-            <div className="input-field col s6">
-              <input id="number" type="number" className="validate" />
-              <label htmlFor="number">Phone Number</label>
-            </div>
-            <div className="input-field col s12">
-              <textarea
-                id="delivery_address"
-                className="materialize-textarea"
-              ></textarea>
-              <label htmlFor="delivery_address">Delivery Address</label>
-            </div>
-          </div>
-          <div className="checkout">
-            <button className="waves-effect waves-light btn">Checkout</button>
-          </div>
-        </form>
-      </div>
-    ) : (
-      ""
-    );
     return (
       <div className="container">
         <div className="cart">

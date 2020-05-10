@@ -3,10 +3,31 @@ import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { takeOrder } from "./Actions/storeActions";
 class confirmOrder extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { name: "", phone: "", address: "" };
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handlePhoneChange = this.handlePhoneChange.bind(this);
+    this.handleAddressChange = this.handleAddressChange.bind(this);
+  }
   //to remove the item completely
-  handletakeOrder = () => {
-    this.props.takeOrder();
+  handletakeOrder = (name, phone, address) => {
+    this.props.takeOrder(name, phone, address);
   };
+
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handlePhoneChange(event) {
+    this.setState({ phone: event.target.value });
+  }
+
+  handleAddressChange(event) {
+    this.setState({ address: event.target.value });
+  }
+
   render() {
     let cartItems = this.props.items.length ? (
       this.props.items.map((item) => {
@@ -55,30 +76,59 @@ class confirmOrder extends Component {
 
     let deliveryDetails = this.props.items.length ? (
       <div className="row">
-        <form className="col s12">
+        <form
+          className="col s12"
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.handletakeOrder(
+              this.state.name,
+              this.state.phone,
+              this.state.address
+            );
+          }}
+        >
           <h5>
             <b>Delivery Information</b>
           </h5>
           <div className="row">
             <div className="input-field col s6">
-              <input id="name" type="text" className="validate" />
+              <input
+                id="name"
+                type="text"
+                className="validate"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+                required
+              />
               <label htmlFor="name">Full Name</label>
             </div>
 
             <div className="input-field col s6">
-              <input id="number" type="number" className="validate" />
+              <input
+                id="number"
+                type="number"
+                value={this.state.phone}
+                onChange={this.handlePhoneChange}
+                className="validate"
+                required
+              />
               <label htmlFor="number">Phone Number</label>
             </div>
             <div className="input-field col s12">
               <textarea
                 id="delivery_address"
+                value={this.state.address}
+                onChange={this.handleAddressChange}
                 className="materialize-textarea"
+                required
               ></textarea>
               <label htmlFor="delivery_address">Delivery Address</label>
             </div>
           </div>
           <div className="checkout">
-            <button className="waves-effect waves-light btn">Checkout</button>
+            <button className="waves-effect waves-light btn-large red darken-3">
+              Confirm Order <i className="material-icons right">done</i>
+            </button>
           </div>
         </form>
       </div>
@@ -90,10 +140,13 @@ class confirmOrder extends Component {
         <div className="cart">
           <h5>
             <b>Confirm Your Order:</b>
-            <Link to="/cart" style={{ float: "right", "font-size": "0.7em" }}>
-              Edit Order
+            <Link to="/cart" style={{ float: "right", fontSize: "0.7em" }}>
+              <button className="waves-effect waves-light btn red ">
+                Edit Order <i className="material-icons left">edit</i>
+              </button>
             </Link>
           </h5>
+          <br />
           <ul className="collection">{cartItems}</ul>
         </div>
         {costTable}
@@ -118,8 +171,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    takeOrder: () => {
-      dispatch(takeOrder());
+    takeOrder: (name, phone, address) => {
+      dispatch(takeOrder(name, phone, address));
     },
   };
 };

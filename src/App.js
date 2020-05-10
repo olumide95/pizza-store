@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Cart from "./components/Cart";
 import ConfirmOrder from "./components/ConfirmOrder";
@@ -22,6 +23,7 @@ class App extends Component {
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/confirm-order" component={ConfirmOrder} />
           </Switch>
+          <Footer />
         </div>
       </Router>
     );

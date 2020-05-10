@@ -6,6 +6,8 @@ import {
   SUB_QUANTITY,
 } from "../Actions/action-types/cart-actions";
 
+import { TAKE_ORDER } from "../Actions/action-types/store-actions";
+
 const defaultState = {
   items: {},
   cartItems: localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [],
@@ -23,6 +25,20 @@ const storeReducer = (state = defaultState, action) => {
           items: action.metadata.data,
           store_info: action.metadata.store_info,
           isDataInitialized: true,
+        };
+      }
+      break;
+
+    case TAKE_ORDER:
+      {
+        takeOrder(state.cartItems, action.phone, action.name, action.address)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => window.console.log(err));
+
+        return {
+          ...state,
         };
       }
       break;
@@ -128,6 +144,22 @@ const storeReducer = (state = defaultState, action) => {
     default:
       return state;
   }
+};
+
+export const takeOrder = async (cartItems, phone, name, address) => {
+  return await axios
+    .post("http://127.0.0.1:8000/api/order", {
+      order: JSON.stringify(cartItems),
+      customer_phone: phone,
+      customer_name: name,
+      delivery_address: address,
+    })
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((error) => {
+      return Promise.reject(error.response.data);
+    });
 };
 
 export const getInitalData = () => async (dispatch) => {

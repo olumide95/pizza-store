@@ -22,7 +22,7 @@ class Menu extends Component {
                   this.handleClick(item.uuid);
                 }}
               >
-                <i className="material-icons">add</i>
+                <i className="material-icons right">add_shopping_cart</i>
               </span>
             </div>
 
@@ -39,8 +39,11 @@ class Menu extends Component {
 
     if (!this.props.isDataInitialized)
       return (
-        <div class="progress">
-          <div class="indeterminate"></div>
+        <div>
+          <div className="progress">
+            <div className="indeterminate"></div>
+          </div>
+          <div className="container"></div>
         </div>
       );
     else if (this.props.isDataInitialized) {

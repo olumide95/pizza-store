@@ -1,3 +1,10 @@
+.container {
+  min-height: calc(100vh - 150px);
+}
+
+.footer-copyright > .container {
+  min-height: auto;
+}
 .box {
   display: flex;
   justify-content: space-between;
@@ -82,10 +89,14 @@
 }
 .progress {
   margin-top: 0px;
-  background-color: #c62828b5 !important;
+  background-color: #d25656b5 !important;
 }
 
 .collection-item.avatar .title.confirmed {
   font-size: 1.2em;
   margin-bottom: 50px;
+}
+
+.page-footer {
+  background-color: transparent;
 }
