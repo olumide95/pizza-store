@@ -100,3 +100,10 @@
 .page-footer {
   background-color: transparent;
 }
+.toastr-green {
+  background-color: green;
+}
+
+.toastr-red {
+  background-color: red;
+}

@@ -7,7 +7,7 @@ import {
 } from "../Actions/action-types/cart-actions";
 
 import { TAKE_ORDER } from "../Actions/action-types/store-actions";
-
+import toast from "../components/toast";
 const defaultState = {
   items: {},
   cartItems: localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [],
@@ -31,14 +31,19 @@ const storeReducer = (state = defaultState, action) => {
 
     case TAKE_ORDER:
       {
-        takeOrder(state.cartItems, action.phone, action.name, action.address)
+        confirmOrder(state.cartItems, action.phone, action.name, action.address)
           .then((res) => {
-            console.log(res);
+            const Icon = ' <i className="material-icons right">done</i>';
+            toast("success", res.message);
+            localStorage.removeItem("cartItems");
+            localStorage.removeItem("total");
           })
           .catch((err) => window.console.log(err));
 
         return {
           ...state,
+          cartItems: [],
+          total: 0,
         };
       }
       break;
@@ -54,6 +59,7 @@ const storeReducer = (state = defaultState, action) => {
           existed_item.quantity += 1;
           localStorage.cartItems = [JSON.stringify(state.cartItems)];
           localStorage.total = state.total + cartItems.amount;
+          toast("success", "Item Added to cart");
           return {
             ...state,
             total: state.total + cartItems.amount,
@@ -73,6 +79,7 @@ const storeReducer = (state = defaultState, action) => {
           }
 
           localStorage.total = newTotal;
+          toast("success", "Item Added to cart");
           return {
             ...state,
             cartItems: [...state.cartItems, cartItems],
@@ -93,9 +100,10 @@ const storeReducer = (state = defaultState, action) => {
         //calculating the total
         let newTotal =
           state.total - itemToRemove.amount * itemToRemove.quantity;
-        console.log(itemToRemove);
+
         localStorage.cartItems = [JSON.stringify(new_items)];
         localStorage.total = newTotal;
+        toast("error", "Item Removed from cart");
         return {
           ...state,
           cartItems: new_items,
@@ -146,7 +154,7 @@ const storeReducer = (state = defaultState, action) => {
   }
 };
 
-export const takeOrder = async (cartItems, phone, name, address) => {
+export const confirmOrder = async (cartItems, phone, name, address) => {
   return await axios
     .post("http://127.0.0.1:8000/api/order", {
       order: JSON.stringify(cartItems),

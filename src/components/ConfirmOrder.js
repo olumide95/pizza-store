@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
-import { takeOrder } from "./Actions/storeActions";
+import { takeOrder } from "../Actions/storeActions";
 class confirmOrder extends Component {
   constructor(props) {
     super(props);

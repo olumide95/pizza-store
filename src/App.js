@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Cart from "./components/Cart";
 import ConfirmOrder from "./components/ConfirmOrder";
-import { getInitalData } from "./components/reducers/storeReducer.js";
+import { getInitalData } from "./reducers/storeReducer.js";
 import { connect } from "react-redux";
 
 class App extends Component {

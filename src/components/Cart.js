@@ -5,7 +5,7 @@ import {
   removeItem,
   addQuantity,
   subtractQuantity,
-} from "./Actions/cartActions";
+} from "../Actions/cartActions";
 class Cart extends Component {
   //to remove the item completely
   handleRemove = (uuid) => {

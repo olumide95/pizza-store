@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addToCart } from "./Actions/cartActions";
+import { addToCart } from "../Actions/cartActions";
 
 class Menu extends Component {
   handleClick = (id) => {
