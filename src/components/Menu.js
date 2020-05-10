@@ -19,7 +19,7 @@ class Menu extends Component {
                 to="/"
                 className="btn-floating halfway-fab waves-effect waves-light red"
                 onClick={() => {
-                  this.handleClick(item.id);
+                  this.handleClick(item.uuid);
                 }}
               >
                 <i className="material-icons">add</i>
@@ -29,7 +29,7 @@ class Menu extends Component {
             <div className="card-content">
               <span className="card-title">{item.name}</span>
               <p>
-                <b>Price: {item.amount}$</b>
+                <b>Price: €{item.amount}</b>
               </p>
             </div>
           </div>
@@ -37,7 +37,12 @@ class Menu extends Component {
       });
     };
 
-    if (!this.props.isDataInitialized) return <div>Initializing data...</div>;
+    if (!this.props.isDataInitialized)
+      return (
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+      );
     else if (this.props.isDataInitialized) {
       return (
         <div className="container">

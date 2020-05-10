@@ -1,5 +1,10 @@
 import axios from "axios";
-//import { ADD_TO_CART } from "../actions/action-types/cart-actions";
+import {
+  ADD_TO_CART,
+  REMOVE_ITEM,
+  ADD_QUANTITY,
+  SUB_QUANTITY,
+} from "../Actions/action-types/cart-actions";
 
 const defaultState = {
   items: {},
@@ -12,47 +17,114 @@ const defaultState = {
 const storeReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "DATA_INITIALIZED":
-      return {
-        ...state,
-        items: action.metadata.data,
-        store_info: action.metadata.store_info,
-        isDataInitialized: true,
-      };
-
-    case "ADD_TO_CART":
-      let cartItems = state.items.find((item) => item.id === action.id);
-
-      //check if the action id exists in the cartItems
-      let existed_item = state.cartItems.find((item) => action.id === item.id);
-      if (existed_item) {
-        existed_item.quantity += 1;
-        localStorage.cartItems = [JSON.stringify(state.cartItems)];
-        localStorage.total = state.total + cartItems.amount;
+      {
         return {
           ...state,
-          total: state.total + cartItems.amount,
+          items: action.metadata.data,
+          store_info: action.metadata.store_info,
+          isDataInitialized: true,
         };
-      } else {
-        cartItems.quantity = 1;
-        //calculating the total
-        let newTotal = state.total + cartItems.amount;
+      }
+      break;
+    case ADD_TO_CART:
+      {
+        let cartItems = state.items.find((item) => item.uuid === action.uuid);
 
-        if (state.cartItems.length !== 0) {
-          localStorage.cartItems = JSON.stringify([
-            ...state.cartItems,
-            cartItems,
-          ]);
+        //check if the action id exists in the cartItems
+        let existed_item = state.cartItems.find(
+          (item) => action.uuid === item.uuid
+        );
+        if (existed_item) {
+          existed_item.quantity += 1;
+          localStorage.cartItems = [JSON.stringify(state.cartItems)];
+          localStorage.total = state.total + cartItems.amount;
+          return {
+            ...state,
+            total: state.total + cartItems.amount,
+          };
         } else {
-          localStorage.cartItems = [JSON.stringify(cartItems)];
-        }
+          cartItems.quantity = 1;
+          //calculating the total
+          let newTotal = state.total + cartItems.amount;
 
+          if (state.cartItems.length !== 0) {
+            localStorage.cartItems = JSON.stringify([
+              ...state.cartItems,
+              cartItems,
+            ]);
+          } else {
+            localStorage.cartItems = [JSON.stringify(cartItems)];
+          }
+
+          localStorage.total = newTotal;
+          return {
+            ...state,
+            cartItems: [...state.cartItems, cartItems],
+            total: newTotal,
+          };
+        }
+      }
+      break;
+    case REMOVE_ITEM:
+      {
+        let itemToRemove = state.cartItems.find(
+          (item) => action.uuid === item.uuid
+        );
+        let new_items = state.cartItems.filter(
+          (item) => action.uuid !== item.uuid
+        );
+
+        //calculating the total
+        let newTotal =
+          state.total - itemToRemove.amount * itemToRemove.quantity;
+        console.log(itemToRemove);
+        localStorage.cartItems = [JSON.stringify(new_items)];
         localStorage.total = newTotal;
         return {
           ...state,
-          cartItems: [...state.cartItems, cartItems],
+          cartItems: new_items,
           total: newTotal,
         };
       }
+      break;
+    case ADD_QUANTITY:
+      {
+        let addedItem = state.cartItems.find(
+          (item) => action.uuid === item.uuid
+        );
+
+        addedItem.quantity += 1;
+        let newTotal = state.total + addedItem.amount;
+        localStorage.cartItems = [JSON.stringify(state.cartItems)];
+        localStorage.total = newTotal;
+        return {
+          ...state,
+          total: newTotal,
+        };
+      }
+      break;
+    case SUB_QUANTITY:
+      {
+        let addedItem = state.cartItems.find(
+          (item) => action.uuid === item.uuid
+        );
+
+        if (addedItem.quantity === 1) {
+          return {
+            ...state,
+          };
+        } else {
+          addedItem.quantity -= 1;
+          let newTotal = state.total - addedItem.amount;
+          localStorage.cartItems = [JSON.stringify(state.cartItems)];
+          localStorage.total = newTotal;
+          return {
+            ...state,
+            total: newTotal,
+          };
+        }
+      }
+      break;
     default:
       return state;
   }

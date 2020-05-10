@@ -1,37 +1,71 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  removeItem,
+  addQuantity,
+  subtractQuantity,
+} from "./Actions/cartActions";
 class Cart extends Component {
+  //to remove the item completely
+  handleRemove = (uuid) => {
+    this.props.removeItem(uuid);
+  };
+  //to add the quantity
+  handleAddQuantity = (uuid) => {
+    this.props.addQuantity(uuid);
+  };
+  //to substruct from the quantity
+  handleSubtractQuantity = (uuid) => {
+    this.props.subtractQuantity(uuid);
+  };
   render() {
     let cartItems = this.props.items.length ? (
       this.props.items.map((item) => {
         return (
-          <li className="collection-item avatar" key={item.id}>
+          <li className="collection-item avatar" key={item.uuid}>
             <div className="item-img">
-              <img src={item.image} alt={item.img} className="" />
+              <img src={item.image} alt={"Pizza"} className="" />
             </div>
 
             <div className="item-desc">
               <span className="title">{item.name}</span>
               <p>{item.desc}</p>
               <p>
-                <b>Price: {item.amount}$</b>
+                <b>Price: €{item.amount}</b>
               </p>
               <p>
                 <b>Quantity: {item.quantity}</b>
               </p>
               <div className="add-remove">
                 <Link to="/cart">
-                  <i className="material-icons quantity">add_circle_outline</i>
+                  <i
+                    className="material-icons quantity"
+                    onClick={() => {
+                      this.handleAddQuantity(item.uuid);
+                    }}
+                  >
+                    add_circle_outline
+                  </i>
                 </Link>
 
                 <Link to="/cart">
-                  <i className="material-icons quantity">
+                  <i
+                    className="material-icons quantity"
+                    onClick={() => {
+                      this.handleSubtractQuantity(item.uuid);
+                    }}
+                  >
                     remove_circle_outline
                   </i>
                 </Link>
               </div>
-              <button className="waves-effect waves-light btn pink remove">
+              <button
+                className="waves-effect waves-light btn pink remove"
+                onClick={() => {
+                  this.handleRemove(item.uuid);
+                }}
+              >
                 Remove
               </button>
             </div>
@@ -39,14 +73,72 @@ class Cart extends Component {
         );
       })
     ) : (
-      <p>Your Cart is Empty</p>
+      <p> Your Cart is Empty</p>
+    );
+
+    let costTable = this.props.items.length ? (
+      <div>
+        <div className="collection">
+          <li className="collection-item">
+            <label>
+              <span>Delivery(+€{this.props.delivery})</span>
+            </label>
+          </li>
+          <li className="collection-item">
+            <b>Total (€): {this.props.total} </b>
+          </li>
+          <li className="collection-item">
+            <b>Total ($): {this.props.total_USD}</b>
+          </li>
+        </div>
+      </div>
+    ) : (
+      ""
+    );
+
+    let deliveryDetails = this.props.items.length ? (
+      <div class="row">
+        <form className="col s12">
+          <h5>
+            <b>Delivery Information</b>
+          </h5>
+          <div className="row">
+            <div className="input-field col s6">
+              <input id="name" type="text" className="validate" />
+              <label for="name">Full Name</label>
+            </div>
+
+            <div className="input-field col s6">
+              <input id="number" type="number" className="validate" />
+              <label for="number">Phone Number</label>
+            </div>
+            <div className="input-field col s12">
+              <textarea
+                id="delivery_address"
+                class="materialize-textarea"
+              ></textarea>
+              <label for="delivery_address">Delivery Address</label>
+            </div>
+          </div>
+          <div className="checkout">
+            <button className="waves-effect waves-light btn">Checkout</button>
+          </div>
+        </form>
+      </div>
+    ) : (
+      ""
     );
     return (
       <div className="container">
         <div className="cart">
-          <h5>Cart:</h5>
+          <h5>
+            <b>Cart:</b>
+          </h5>
           <ul className="collection">{cartItems}</ul>
         </div>
+        {costTable}
+
+        {deliveryDetails}
       </div>
     );
   }
@@ -55,7 +147,26 @@ class Cart extends Component {
 const mapStateToProps = (state) => {
   return {
     items: state.cartItems,
+    total: +state.total + +state.store_info.delivery_cost,
+    delivery: state.store_info.delivery_cost,
+    total_USD: (
+      state.store_info.EUR_TO_USD *
+      (+state.total + +state.store_info.delivery_cost)
+    ).toFixed(2),
   };
 };
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeItem: (uuid) => {
+      dispatch(removeItem(uuid));
+    },
+    addQuantity: (uuid) => {
+      dispatch(addQuantity(uuid));
+    },
+    subtractQuantity: (uuid) => {
+      dispatch(subtractQuantity(uuid));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

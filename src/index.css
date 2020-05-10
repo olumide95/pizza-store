@@ -79,3 +79,10 @@
     margin-left: 0px;
   }
 }
+.progress .indeterminate {
+  background-color: #c62828 !important;
+}
+.progress {
+  margin-top: 0px;
+  background-color: #c62828b5 !important;
+}
