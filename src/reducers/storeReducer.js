@@ -5,15 +5,19 @@ import {
   ADD_QUANTITY,
   SUB_QUANTITY,
 } from "../Actions/action-types/cart-actions";
-
 import { TAKE_ORDER } from "../Actions/action-types/store-actions";
 import toast from "../components/toast";
+import { ApiService } from "../Api.service";
+
 const defaultState = {
   items: {},
   cartItems: localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [],
   total: localStorage.total ? parseInt(localStorage.total) : 0,
   store_info: {},
   isDataInitialized: false,
+  isLoggedIn: localStorage.isLoggedIn ?? 0,
+  customer_info: localStorage.user ? JSON.parse(localStorage.user) : {},
+  token: localStorage.token ? localStorage.token : "",
 };
 
 const storeReducer = (state = defaultState, action) => {
@@ -29,11 +33,25 @@ const storeReducer = (state = defaultState, action) => {
       }
       break;
 
+    case "AUTHENTICATED":
+      {
+        return {
+          ...state,
+          token: action.res.token,
+          customer_info: JSON.stringify(action.res.user),
+          isLoggedIn: 1,
+        };
+      }
+      break;
     case TAKE_ORDER:
       {
-        confirmOrder(state.cartItems, action.phone, action.name, action.address)
+        ApiService.confirmOrder(
+          state.cartItems,
+          action.phone,
+          action.name,
+          action.address
+        )
           .then((res) => {
-            const Icon = ' <i className="material-icons right">done</i>';
             toast("success", res.message);
             localStorage.removeItem("cartItems");
             localStorage.removeItem("total");
@@ -154,22 +172,6 @@ const storeReducer = (state = defaultState, action) => {
   }
 };
 
-export const confirmOrder = async (cartItems, phone, name, address) => {
-  return await axios
-    .post("http://127.0.0.1:8000/api/order", {
-      order: JSON.stringify(cartItems),
-      customer_phone: phone,
-      customer_name: name,
-      delivery_address: address,
-    })
-    .then((res) => {
-      return Promise.resolve(res.data);
-    })
-    .catch((error) => {
-      return Promise.reject(error.response.data);
-    });
-};
-
 export const getInitalData = () => async (dispatch) => {
   try {
     let metadata = await axios.get("http://127.0.0.1:8000/api/menu");
@@ -179,6 +181,37 @@ export const getInitalData = () => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const login = (email, password) => async (dispatch) => {
+  ApiService.login(email, password)
+    .then((res) => {
+      toast("success", res.message);
+      localStorage.user = JSON.stringify(res.user);
+      localStorage.token = res.token;
+      localStorage.isLoggedIn = 1;
+
+      dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
+    })
+    .catch((err) => toast("error", err.message));
+};
+
+export const register = (
+  name,
+  email,
+  password,
+  password_confirmation
+) => async (dispatch) => {
+  ApiService.register(name, email, password, password_confirmation)
+    .then((res) => {
+      toast("success", res.message);
+      localStorage.user = JSON.stringify(res.user);
+      localStorage.token = res.token;
+      localStorage.isLoggedIn = 1;
+
+      dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
+    })
+    .catch((err) => toast("error", err.message));
 };
 
 export default storeReducer;

@@ -11,7 +11,7 @@ class confirmOrder extends Component {
     this.handlePhoneChange = this.handlePhoneChange.bind(this);
     this.handleAddressChange = this.handleAddressChange.bind(this);
   }
-  //to remove the item completely
+
   handletakeOrder = (name, phone, address) => {
     this.props.takeOrder(name, phone, address);
   };
