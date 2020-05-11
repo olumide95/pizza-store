@@ -39,12 +39,7 @@ class Menu extends Component {
 
     if (!this.props.isDataInitialized)
       return (
-        <div>
-          <div className="progress">
-            <div className="indeterminate"></div>
-          </div>
-          <div className="container"></div>
-        </div>
+        <img src="./preloader.gif" className="preloader" alt="loading..." />
       );
     else if (this.props.isDataInitialized) {
       return (

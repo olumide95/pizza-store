@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { getOrders } from "../reducers/storeReducer.js";
 class confirmOrder extends Component {
   componentDidMount() {
@@ -11,7 +11,11 @@ class confirmOrder extends Component {
       ? this.props.orders.map((order) => {
           return (
             <tr key={order.order_id}>
-              <td>{order.order_id}</td>
+              <td>
+                <Link to={"/my-orders/" + order.order_id}>
+                  {order.order_id}
+                </Link>
+              </td>
               <td>{order.customer_name}</td>
               <td>{order.customer_phone}</td>
               <td>{order.delivery_address}</td>
@@ -39,10 +43,16 @@ class confirmOrder extends Component {
                 </tr>
               </thead>
 
-              <tbody>{orders} </tbody>
+              <tbody>{orders}</tbody>
             </table>
           ) : (
+            <img src="./preloader.gif" className="preloader" alt="loading..." />
+          )}
+
+          {!this.props.orders.length && !this.props.isLoading ? (
             <h1 className="center-align">You Havent Placed any order</h1>
+          ) : (
+            ""
           )}
         </div>
       </div>
@@ -54,6 +64,7 @@ const mapStateToProps = (state) => {
   return {
     orders: state.customer_orders,
     isLoggedIn: state.isLoggedIn,
+    isLoading: state.isLoading,
   };
 };
 

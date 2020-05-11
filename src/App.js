@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import ConfirmOrder from "./components/ConfirmOrder";
 import Orders from "./components/Orders";
+import Order from "./components/Order";
 import { getInitalData } from "./reducers/storeReducer.js";
 import { connect } from "react-redux";
 
@@ -18,20 +19,36 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Header />
-
-          <Switch>
-            <Route exact path="/" component={Menu} />
-            <Route exact path="/cart" component={Cart} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/my-orders" component={Orders} />
-            <Route exact path="/confirm-order" component={ConfirmOrder} />
-          </Switch>
+          <React.Fragment>
+            <Header />
+            {this.props.isLoading ? (
+              <div>
+                <div className="progress">
+                  <div className="indeterminate"></div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            <Switch>
+              <Route exact path="/" component={Menu} />
+              <Route exact path="/cart" component={Cart} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/my-orders" component={Orders} />
+              <Route exact path="/my-orders/:orderID" component={Order} />
+              <Route exact path="/confirm-order" component={ConfirmOrder} />
+            </Switch>
+          </React.Fragment>
         </div>
       </Router>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.isLoading,
+  };
+};
 
-export default connect((state) => state, { getInitalData })(App);
+export default connect(mapStateToProps, { getInitalData })(App);

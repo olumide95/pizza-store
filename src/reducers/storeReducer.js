@@ -18,6 +18,7 @@ const defaultState = {
   token: localStorage.token ? localStorage.token : "",
   customer_orders: {},
   customer_name: localStorage.user ? JSON.parse(localStorage.user).name : "",
+  isLoading: false,
 };
 
 const storeReducer = (state = defaultState, action) => {
@@ -32,7 +33,12 @@ const storeReducer = (state = defaultState, action) => {
         };
       }
       break;
-
+    case "TOGGLE_LOADING": {
+      return {
+        ...state,
+        isLoading: action.isLoading,
+      };
+    }
     case "AUTHENTICATED":
       {
         return {
@@ -185,6 +191,10 @@ const storeReducer = (state = defaultState, action) => {
 };
 
 export const getInitalData = () => async (dispatch) => {
+  dispatch({
+    type: "TOGGLE_LOADING",
+    isLoading: true,
+  });
   ApiService.menu()
     .then((res) => {
       let metadata = res;
@@ -193,17 +203,30 @@ export const getInitalData = () => async (dispatch) => {
         metadata,
         isDataInitialized: true,
       });
+
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
     })
     .catch((err) => toast("error", err.message));
 };
 
 export const login = (email, password) => async (dispatch) => {
+  dispatch({
+    type: "TOGGLE_LOADING",
+    isLoading: true,
+  });
   ApiService.login(email, password)
     .then((res) => {
       toast("success", res.message);
       localStorage.user = JSON.stringify(res.user);
       localStorage.token = res.token;
       localStorage.isLoggedIn = 1;
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
 
       dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
     })
@@ -216,13 +239,20 @@ export const register = (
   password,
   password_confirmation
 ) => async (dispatch) => {
+  dispatch({
+    type: "TOGGLE_LOADING",
+    isLoading: true,
+  });
   ApiService.register(name, email, password, password_confirmation)
     .then((res) => {
       toast("success", res.message);
       localStorage.user = JSON.stringify(res.user);
       localStorage.token = res.token;
       localStorage.isLoggedIn = 1;
-
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
       dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
     })
     .catch((err) => toast("error", err.message));
@@ -231,19 +261,35 @@ export const register = (
 export const takeOrder = (cartItems, name, phone, address, uuid) => async (
   dispatch
 ) => {
+  dispatch({
+    type: "TOGGLE_LOADING",
+    isLoading: true,
+  });
   ApiService.confirmOrder(cartItems, phone, name, address, uuid)
     .then((res) => {
       toast("success", res.message);
       localStorage.removeItem("cartItems");
       localStorage.removeItem("total");
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
       dispatch({ type: "TAKE_ORDER", res, isLoggedIn: 1 });
     })
     .catch((err) => window.console.log(err));
 };
 
 export const getOrders = () => async (dispatch) => {
+  dispatch({
+    type: "TOGGLE_LOADING",
+    isLoading: true,
+  });
   ApiService.getOrders()
     .then((res) => {
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
       dispatch({ type: "GET_ORDERS", res });
     })
     .catch((err) => window.console.log(err));
