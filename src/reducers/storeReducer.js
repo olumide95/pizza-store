@@ -209,7 +209,13 @@ export const getInitalData = () => async (dispatch) => {
         isLoading: false,
       });
     })
-    .catch((err) => toast("error", err.message));
+    .catch((err) => {
+      toast("error", err.message);
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
+    });
 };
 
 export const login = (email, password) => async (dispatch) => {
@@ -230,7 +236,13 @@ export const login = (email, password) => async (dispatch) => {
 
       dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
     })
-    .catch((err) => toast("error", err.message));
+    .catch((err) => {
+      toast("error", err.message);
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
+    });
 };
 
 export const register = (
@@ -255,7 +267,13 @@ export const register = (
       });
       dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
     })
-    .catch((err) => toast("error", err.message));
+    .catch((err) => {
+      toast("error", err.message);
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
+    });
 };
 
 export const takeOrder = (cartItems, name, phone, address, uuid) => async (
