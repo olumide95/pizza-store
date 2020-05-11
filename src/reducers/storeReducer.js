@@ -1,11 +1,9 @@
-import axios from "axios";
 import {
   ADD_TO_CART,
   REMOVE_ITEM,
   ADD_QUANTITY,
   SUB_QUANTITY,
 } from "../Actions/action-types/cart-actions";
-import { TAKE_ORDER } from "../Actions/action-types/store-actions";
 import toast from "../components/toast";
 import { ApiService } from "../Api.service";
 
@@ -43,21 +41,8 @@ const storeReducer = (state = defaultState, action) => {
         };
       }
       break;
-    case TAKE_ORDER:
+    case "TAKE_ORDER":
       {
-        ApiService.confirmOrder(
-          state.cartItems,
-          action.phone,
-          action.name,
-          action.address
-        )
-          .then((res) => {
-            toast("success", res.message);
-            localStorage.removeItem("cartItems");
-            localStorage.removeItem("total");
-          })
-          .catch((err) => window.console.log(err));
-
         return {
           ...state,
           cartItems: [],
@@ -173,14 +158,16 @@ const storeReducer = (state = defaultState, action) => {
 };
 
 export const getInitalData = () => async (dispatch) => {
-  try {
-    let metadata = await axios.get("http://127.0.0.1:8000/api/menu");
-    metadata = metadata.data;
-    // You're dispatching not only the metadata, but also setting isDataInitialized to true, to denote, that data has been loaded
-    dispatch({ type: "DATA_INITIALIZED", metadata, isDataInitialized: true });
-  } catch (error) {
-    console.log(error);
-  }
+  ApiService.menu()
+    .then((res) => {
+      let metadata = res;
+      dispatch({
+        type: "DATA_INITIALIZED",
+        metadata,
+        isDataInitialized: true,
+      });
+    })
+    .catch((err) => toast("error", err.message));
 };
 
 export const login = (email, password) => async (dispatch) => {
@@ -212,6 +199,19 @@ export const register = (
       dispatch({ type: "AUTHENTICATED", res, isLoggedIn: 1 });
     })
     .catch((err) => toast("error", err.message));
+};
+
+export const takeOrder = (cartItems, name, phone, address, uuid) => async (
+  dispatch
+) => {
+  ApiService.confirmOrder(cartItems, phone, name, address, uuid)
+    .then((res) => {
+      toast("success", res.message);
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("total");
+      dispatch({ type: "TAKE_ORDER", res, isLoggedIn: 1 });
+    })
+    .catch((err) => window.console.log(err));
 };
 
 export default storeReducer;

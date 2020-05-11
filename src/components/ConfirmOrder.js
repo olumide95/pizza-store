@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
-import { takeOrder } from "../Actions/storeActions";
+import { takeOrder } from "../reducers/storeReducer.js";
+
 class confirmOrder extends Component {
   constructor(props) {
     super(props);
@@ -13,7 +14,13 @@ class confirmOrder extends Component {
   }
 
   handletakeOrder = (name, phone, address) => {
-    this.props.takeOrder(name, phone, address);
+    this.props.takeOrder(
+      this.props.items,
+      name,
+      phone,
+      address,
+      this.props.user_uuid
+    );
   };
 
   handleNameChange(event) {
@@ -159,6 +166,7 @@ class confirmOrder extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    user_uuid: state.customer_info.uuid ?? null,
     items: state.cartItems,
     total: +state.total + +state.store_info.delivery_cost,
     delivery: state.store_info.delivery_cost,
@@ -169,11 +177,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    takeOrder: (name, phone, address) => {
-      dispatch(takeOrder(name, phone, address));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(confirmOrder);
+export default connect(mapStateToProps, { takeOrder })(confirmOrder);

@@ -1,5 +1,6 @@
 .container {
   min-height: calc(100vh - 170px);
+  margin-bottom: 20px;
 }
 
 .footer-copyright > .container {
@@ -22,7 +23,7 @@
   font-weight: 400;
 }
 .cart {
-  margin-top: 75px;
+  margin-top: 55px;
 }
 .collection .collection-item {
   display: flex;
@@ -71,6 +72,10 @@
   font-size: 1em;
 }
 
+.collection .collection-item img {
+  object-fit: cover;
+}
+
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media (max-width: 600px) {
   .collection .collection-item.avatar {
@@ -79,9 +84,10 @@
   }
 
   .collection .collection-item img {
-    width: 200px;
-    margin-right: 23px;
-    margin-left: 0px;
+    width: 150px;
+    object-fit: cover;
+    margin-right: 15px;
+    margin-left: 5px;
   }
 
   .sidenav li > a.profile {

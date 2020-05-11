@@ -1,12 +1,23 @@
 import axios from "axios";
 const ApiService = {
-  confirmOrder: async (cartItems, phone, name, address) => {
+  menu: async () => {
+    return await axios
+      .get("http://127.0.0.1:8000/api/menu")
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((error) => {
+        return Promise.reject(error.response.data);
+      });
+  },
+  confirmOrder: async (cartItems, phone, name, address, uuid = null) => {
     return await axios
       .post("http://127.0.0.1:8000/api/order", {
         order: JSON.stringify(cartItems),
         customer_phone: phone,
         customer_name: name,
         delivery_address: address,
+        user_id: uuid,
       })
       .then((res) => {
         return Promise.resolve(res.data);
