@@ -10,6 +10,20 @@ const ApiService = {
         return Promise.reject(error.response.data);
       });
   },
+
+  getOrders: async () => {
+    return await axios
+      .get("http://127.0.0.1:8000/api/orders", {
+        headers: { Authorization: "Bearer " + localStorage.token },
+      })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((error) => {
+        return Promise.reject(error.response.data);
+      });
+  },
+
   confirmOrder: async (cartItems, phone, name, address, uuid = null) => {
     return await axios
       .post("http://127.0.0.1:8000/api/order", {

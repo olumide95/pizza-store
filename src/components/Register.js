@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { register } from "../reducers/storeReducer.js";
-
+import toast from "../components/toast";
 class confirmOrder extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +22,11 @@ class confirmOrder extends Component {
   }
 
   handleRegister = (name, email, password, confirm_password) => {
+    if (password !== confirm_password) {
+      toast("error", "Password does not match");
+      return;
+    }
+
     this.props.register(name, email, password, confirm_password);
   };
 
@@ -38,6 +43,7 @@ class confirmOrder extends Component {
   }
 
   handleConfirmPasswordChange(event) {
+    event.target.setCustomValidity("");
     this.setState({ confirm_password: event.target.value });
   }
 
@@ -92,6 +98,7 @@ class confirmOrder extends Component {
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
                 className="validate"
+                minLength="6"
                 required
               />
               <label htmlFor="password">Password</label>
@@ -104,13 +111,17 @@ class confirmOrder extends Component {
                 value={this.state.confirm_password}
                 onChange={this.handleConfirmPasswordChange}
                 className="validate"
+                minLength="6"
                 required
               />
               <label htmlFor="confirm_password">Confirm Password</label>
             </div>
           </div>
           <div className="checkout">
-            <button className="waves-effect waves-light btn-large red darken-3">
+            <button
+              className="waves-effect waves-light btn-large red darken-3"
+              type="submit"
+            >
               Sign Up <i className="material-icons right">power_settings_new</i>
             </button>
           </div>

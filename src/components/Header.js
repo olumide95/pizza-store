@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
+import { logout } from "../reducers/storeReducer.js";
 class Header extends Component {
   componentDidMount() {
     let dropdown = document.querySelectorAll(".dropdown-trigger");
@@ -9,24 +9,53 @@ class Header extends Component {
     let sidenav = document.querySelectorAll(".sidenav");
     window.M.Sidenav.init(sidenav, { inDuration: 300, outDuration: 225 });
   }
+  handleLogout = (id) => {
+    this.props.logout();
+  };
   render() {
+    let loggedOut = (
+      <React.Fragment>
+        <li>
+          <Link to="/login">
+            <i className="material-icons left">account_box</i>Login
+          </Link>
+        </li>
+
+        <li>
+          <Link to="/register">
+            <i className="material-icons left">account_box</i>Register
+          </Link>
+        </li>
+      </React.Fragment>
+    );
+
+    let loggedIn = (
+      <React.Fragment>
+        <React.Fragment>
+          <li>
+            <Link to="/my-orders">My Orders</Link>
+          </li>
+          <li>
+            <Link
+              to=""
+              onClick={() => {
+                this.handleLogout();
+              }}
+            >
+              Logout
+            </Link>
+          </li>
+        </React.Fragment>
+      </React.Fragment>
+    );
     return (
       <React.Fragment>
         <ul id="dropdown1" className="dropdown-content">
-          <li>
-            <Link to="/orders">My Orders</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
+          {this.props.isLoggedIn ? loggedIn : loggedOut}
         </ul>
+
         <ul id="dropdown2" className="dropdown-content">
-          <li>
-            <Link to="/orders">My Orders</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
+          {this.props.isLoggedIn ? loggedIn : loggedOut}
         </ul>
         <nav className="nav-wrapper red darken-3">
           <div className="container">
@@ -50,40 +79,19 @@ class Header extends Component {
                   <i className="material-icons left">shopping_cart</i> Cart
                 </Link>
               </li>
-              {!this.props.isLoggedIn ? (
-                <li>
-                  <Link to="/login">
-                    <i className="material-icons left">account_box</i>Login
-                  </Link>
-                </li>
-              ) : (
-                ""
-              )}
 
-              {!this.props.isLoggedIn ? (
-                <li>
-                  <Link to="/register">
-                    <i className="material-icons left">account_box</i>Register
-                  </Link>
-                </li>
-              ) : (
-                ""
-              )}
-
-              {this.props.isLoggedIn ? (
-                <li>
-                  <a
-                    className="dropdown-trigger"
-                    href="#!"
-                    data-target="dropdown1"
-                  >
-                    <i className="material-icons left">account_circle</i>{" "}
-                    {this.props.user.name}
-                  </a>
-                </li>
-              ) : (
-                ""
-              )}
+              <li>
+                <Link
+                  to=""
+                  className="dropdown-trigger"
+                  data-target="dropdown1"
+                >
+                  <i className="material-icons left">account_circle</i>
+                  {this.props.customer_name && this.props.isLoggedIn
+                    ? this.props.customer_name
+                    : "My Account"}
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>
@@ -98,40 +106,19 @@ class Header extends Component {
               <i className="material-icons left">shopping_cart</i> Cart
             </Link>
           </li>
-          {!this.props.isLoggedIn ? (
-            <li>
-              <Link to="/login">
-                <i className="material-icons left">account_box</i>Login
-              </Link>
-            </li>
-          ) : (
-            ""
-          )}
 
-          {!this.props.isLoggedIn ? (
-            <li>
-              <Link to="/register">
-                <i className="material-icons left">account_box</i>Register
-              </Link>
-            </li>
-          ) : (
-            ""
-          )}
-
-          {this.props.isLoggedIn ? (
-            <li>
-              <a
-                className="dropdown-trigger mobile profile"
-                href="#!"
-                data-target="dropdown2"
-              >
-                <i className="material-icons left">account_circle</i>{" "}
-                {this.props.user.name}
-              </a>
-            </li>
-          ) : (
-            ""
-          )}
+          <li>
+            <Link
+              className="dropdown-trigger mobile profile"
+              to=""
+              data-target="dropdown2"
+            >
+              <i className="material-icons left">account_circle</i>
+              {this.props.customer_name && this.props.isLoggedIn
+                ? this.props.customer_name
+                : "My Account"}
+            </Link>
+          </li>
         </ul>
       </React.Fragment>
     );
@@ -140,8 +127,8 @@ class Header extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.isLoggedIn,
-    user: state.customer_info,
+    customer_name: state.customer_name,
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { logout })(Header);

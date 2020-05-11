@@ -3,9 +3,6 @@
   margin-bottom: 20px;
 }
 
-.footer-copyright > .container {
-  min-height: auto;
-}
 .box {
   display: flex;
   justify-content: space-between;
@@ -119,10 +116,6 @@
   margin-bottom: 50px;
 }
 
-.page-footer {
-  padding-top: 0%;
-  background-color: transparent;
-}
 .toastr-green {
   background-color: green;
 }
@@ -133,4 +126,8 @@
 .Form {
   padding-top: 15%;
   padding-bottom: 25%;
+}
+
+.orders {
+  margin-top: 40px;
 }

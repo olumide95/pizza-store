@@ -16,6 +16,8 @@ const defaultState = {
   isLoggedIn: localStorage.isLoggedIn ?? 0,
   customer_info: localStorage.user ? JSON.parse(localStorage.user) : {},
   token: localStorage.token ? localStorage.token : "",
+  customer_orders: {},
+  customer_name: localStorage.user ? JSON.parse(localStorage.user).name : "",
 };
 
 const storeReducer = (state = defaultState, action) => {
@@ -35,9 +37,25 @@ const storeReducer = (state = defaultState, action) => {
       {
         return {
           ...state,
+          customer_name: action.res.user.name,
           token: action.res.token,
           customer_info: JSON.stringify(action.res.user),
           isLoggedIn: 1,
+        };
+      }
+      break;
+
+    case "LOGOUT":
+      {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("isLoggedIn");
+        return {
+          ...state,
+          token: "",
+          customer_info: "",
+          isLoggedIn: 0,
+          customer_orders: {},
         };
       }
       break;
@@ -47,6 +65,15 @@ const storeReducer = (state = defaultState, action) => {
           ...state,
           cartItems: [],
           total: 0,
+        };
+      }
+      break;
+
+    case "GET_ORDERS":
+      {
+        return {
+          ...state,
+          customer_orders: action.res.data,
         };
       }
       break;
@@ -212,6 +239,18 @@ export const takeOrder = (cartItems, name, phone, address, uuid) => async (
       dispatch({ type: "TAKE_ORDER", res, isLoggedIn: 1 });
     })
     .catch((err) => window.console.log(err));
+};
+
+export const getOrders = () => async (dispatch) => {
+  ApiService.getOrders()
+    .then((res) => {
+      dispatch({ type: "GET_ORDERS", res });
+    })
+    .catch((err) => window.console.log(err));
+};
+
+export const logout = () => async (dispatch) => {
+  dispatch({ type: "LOGOUT" });
 };
 
 export default storeReducer;

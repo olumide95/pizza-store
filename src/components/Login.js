@@ -58,6 +58,7 @@ class confirmOrder extends Component {
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
                 className="validate"
+                minLength="6"
                 required
               />
               <label htmlFor="password">Password</label>
