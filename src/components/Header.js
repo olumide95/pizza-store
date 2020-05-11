@@ -37,7 +37,7 @@ class Header extends Component {
           </li>
           <li>
             <Link
-              to=""
+              to="#"
               onClick={() => {
                 this.handleLogout();
               }}
