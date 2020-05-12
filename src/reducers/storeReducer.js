@@ -294,7 +294,13 @@ export const takeOrder = (cartItems, name, phone, address, uuid) => async (
       });
       dispatch({ type: "TAKE_ORDER", res, isLoggedIn: 1 });
     })
-    .catch((err) => window.console.log(err));
+    .catch((err) => {
+      toast("error", "Order Confirmation Failed, try again");
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
+    });
 };
 
 export const getOrders = () => async (dispatch) => {
@@ -310,7 +316,13 @@ export const getOrders = () => async (dispatch) => {
       });
       dispatch({ type: "GET_ORDERS", res });
     })
-    .catch((err) => window.console.log(err));
+    .catch((err) => {
+      window.console.log(err);
+      dispatch({
+        type: "TOGGLE_LOADING",
+        isLoading: false,
+      });
+    });
 };
 
 export const logout = () => async (dispatch) => {
