@@ -1,8 +1,13 @@
 import axios from "axios";
 const ApiService = {
+  baseUrl: "",
+  init(baseURL) {
+    ApiService.baseUrl = baseURL;
+    axios.defaults.baseURL = baseURL;
+  },
   menu: async () => {
     return await axios
-      .get("http://127.0.0.1:8000/api/menu")
+      .get("/api/menu")
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -13,7 +18,7 @@ const ApiService = {
 
   getOrders: async () => {
     return await axios
-      .get("http://127.0.0.1:8000/api/orders", {
+      .get("/api/orders", {
         headers: { Authorization: "Bearer " + localStorage.token },
       })
       .then((res) => {
@@ -26,7 +31,7 @@ const ApiService = {
 
   confirmOrder: async (cartItems, phone, name, address, uuid = null) => {
     return await axios
-      .post("http://127.0.0.1:8000/api/order", {
+      .post("/api/order", {
         order: JSON.stringify(cartItems),
         customer_phone: phone,
         customer_name: name,
@@ -43,7 +48,7 @@ const ApiService = {
 
   login: async (email, password) => {
     return await axios
-      .post("http://127.0.0.1:8000/api/login", {
+      .post("/api/login", {
         email: email,
         password: password,
       })
@@ -57,7 +62,7 @@ const ApiService = {
 
   register: async (name, email, password, confirm_password) => {
     return await axios
-      .post("http://127.0.0.1:8000/api/register", {
+      .post("/api/register", {
         name: name,
         email: email,
         password: password,
