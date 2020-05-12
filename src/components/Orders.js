@@ -46,7 +46,12 @@ class confirmOrder extends Component {
               <tbody>{orders}</tbody>
             </table>
           ) : (
+            ""
+          )}
+          {this.props.isLoading ? (
             <img src="./preloader.gif" className="preloader" alt="loading..." />
+          ) : (
+            ""
           )}
 
           {!this.props.orders.length && !this.props.isLoading ? (

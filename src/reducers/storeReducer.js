@@ -210,7 +210,7 @@ export const getInitalData = () => async (dispatch) => {
       });
     })
     .catch((err) => {
-      toast("error", err.message);
+      toast("error", "There was an error loading the menu, try again!");
       dispatch({
         type: "TOGGLE_LOADING",
         isLoading: false,
@@ -295,7 +295,7 @@ export const takeOrder = (cartItems, name, phone, address, uuid) => async (
       dispatch({ type: "TAKE_ORDER", res, isLoggedIn: 1 });
     })
     .catch((err) => {
-      toast("error", "Order Confirmation Failed, try again");
+      toast("error", "Order Confirmation Failed, try again!");
       dispatch({
         type: "TOGGLE_LOADING",
         isLoading: false,
@@ -317,7 +317,7 @@ export const getOrders = () => async (dispatch) => {
       dispatch({ type: "GET_ORDERS", res });
     })
     .catch((err) => {
-      window.console.log(err);
+      toast("error", "Error while retrieving orders , try again!");
       dispatch({
         type: "TOGGLE_LOADING",
         isLoading: false,
