@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import { createStore, applyMiddleware } from "redux";
 import { ApiService } from "./Api.service";
-ApiService.init("http://127.0.0.1:8000");
+ApiService.init("http://127.0.0.1:8000/api");
 const store = createStore(storeReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(

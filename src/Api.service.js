@@ -7,7 +7,7 @@ const ApiService = {
   },
   menu: async () => {
     return await axios
-      .get("/api/menu")
+      .get("/menu")
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -18,7 +18,7 @@ const ApiService = {
 
   getOrders: async () => {
     return await axios
-      .get("/api/orders", {
+      .get("/orders", {
         headers: { Authorization: "Bearer " + localStorage.token },
       })
       .then((res) => {
@@ -31,7 +31,7 @@ const ApiService = {
 
   confirmOrder: async (cartItems, phone, name, address, uuid = null) => {
     return await axios
-      .post("/api/order", {
+      .post("/order", {
         order: JSON.stringify(cartItems),
         customer_phone: phone,
         customer_name: name,
@@ -48,7 +48,7 @@ const ApiService = {
 
   login: async (email, password) => {
     return await axios
-      .post("/api/login", {
+      .post("/login", {
         email: email,
         password: password,
       })
@@ -62,7 +62,7 @@ const ApiService = {
 
   register: async (name, email, password, confirm_password) => {
     return await axios
-      .post("/api/register", {
+      .post("/register", {
         name: name,
         email: email,
         password: password,
