@@ -5,7 +5,7 @@ import {
   SUB_QUANTITY,
 } from "../Actions/action-types/cart-actions";
 import toast from "../components/toast";
-import { ApiService } from "...service";
+import { ApiService } from "../Api.service";
 
 const defaultState = {
   items: {},
