@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import { createStore, applyMiddleware } from "redux";
 import { ApiService } from "./Api.service";
-ApiService.init("http://peaceful-thicket-97993.herokuapp.com/api");
+ApiService.init("https://peaceful-thicket-97993.herokuapp.com/api");
 const store = createStore(storeReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
