@@ -19,7 +19,11 @@ class confirmOrder extends Component {
               <td>{order.customer_name}</td>
               <td>{order.customer_phone}</td>
               <td>{order.delivery_address}</td>
-              <td>{order.order.length}</td>
+              <td>
+                {order.order
+                  .map((order) => order.quantity)
+                  .reduce((a, b) => a + b)}
+              </td>
               <td>{order.created_at}</td>
             </tr>
           );
