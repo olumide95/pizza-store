@@ -1,3 +1,7 @@
+nav ul a {
+  display: flex;
+  align-items: center;
+}
 .container {
   min-height: calc(100vh - 170px);
   margin-bottom: 20px;

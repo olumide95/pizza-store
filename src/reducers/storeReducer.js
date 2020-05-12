@@ -45,7 +45,7 @@ const storeReducer = (state = defaultState, action) => {
           ...state,
           customer_name: action.res.user.name,
           token: action.res.token,
-          customer_info: JSON.stringify(action.res.user),
+          customer_info: action.res.user,
           isLoggedIn: 1,
         };
       }
