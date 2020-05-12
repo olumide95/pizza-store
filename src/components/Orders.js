@@ -34,7 +34,7 @@ class confirmOrder extends Component {
       <div className="container">
         <div className="orders">
           {this.props.isLoggedIn ? "" : <Redirect to="/login" />}
-          {this.props.orders.length ? (
+          {this.props.orders.length && !this.props.isLoading ? (
             <table className="striped responsive-table header-fixed">
               <thead>
                 <tr>
