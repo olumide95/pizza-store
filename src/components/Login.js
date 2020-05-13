@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { login } from "../reducers/storeReducer.js";
 
-class confirmOrder extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = { email: "", password: "" };
@@ -48,7 +48,7 @@ class confirmOrder extends Component {
                 onChange={this.handleEmailChange}
                 required
               />
-              <label htmlFor="email">Email </label>
+              <label htmlFor="email">Email</label>
             </div>
 
             <div className="input-field col s6">
@@ -89,4 +89,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { login })(confirmOrder);
+export default connect(mapStateToProps, { login })(Login);

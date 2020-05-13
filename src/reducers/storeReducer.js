@@ -79,7 +79,7 @@ const storeReducer = (state = defaultState, action) => {
       {
         return {
           ...state,
-          customer_orders: action.res.data,
+          customer_orders: action.orders,
         };
       }
       break;
@@ -314,7 +314,8 @@ export const getOrders = () => async (dispatch) => {
         type: "TOGGLE_LOADING",
         isLoading: false,
       });
-      dispatch({ type: "GET_ORDERS", res });
+      let orders = res.data ?? [];
+      dispatch({ type: "GET_ORDERS", orders });
     })
     .catch((err) => {
       toast("error", "Error while retrieving orders , try again!");

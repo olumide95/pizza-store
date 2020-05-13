@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { getOrders } from "../reducers/storeReducer.js";
-class confirmOrder extends Component {
+class Orders extends Component {
   componentDidMount() {
     this.props.getOrders();
   }
@@ -77,4 +77,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getOrders })(confirmOrder);
+export default connect(mapStateToProps, { getOrders })(Orders);
