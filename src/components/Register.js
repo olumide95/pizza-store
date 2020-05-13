@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { register } from "../reducers/storeReducer.js";
 import toast from "../components/toast";
-class confirmOrder extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -145,4 +145,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { register })(confirmOrder);
+export default connect(mapStateToProps, { register })(Register);

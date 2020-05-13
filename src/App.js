@@ -10,7 +10,8 @@ import Orders from "./components/Orders";
 import Order from "./components/Order";
 import { getInitalData } from "./reducers/storeReducer.js";
 import { connect } from "react-redux";
-
+import "materialize-css/dist/css/materialize.min.css";
+import M from "materialize-css/dist/js/materialize.min.js";
 class App extends Component {
   componentDidMount() {
     this.props.getInitalData();
