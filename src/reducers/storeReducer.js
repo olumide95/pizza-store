@@ -120,7 +120,7 @@ const storeReducer = (state = defaultState, action) => {
         toast("success", "Item Added to cart");
         return {
           ...state,
-          cartItems: [state_cartItems, cartItems],
+          cartItems: [...state_cartItems, cartItems],
           total: newTotal,
         };
       }
