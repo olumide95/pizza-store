@@ -102,11 +102,16 @@ const storeReducer = (state = defaultState, action) => {
         //calculating the total
         let newTotal = state.total + cartItems.amount;
 
+        let state_cartItems = [];
+
+        if (typeof state.cartItems[Symbol.iterator] === "function") {
+          state_cartItems = state.cartItems;
+        } else {
+          state_cartItems = [state.cartItems];
+        }
+
         if (state.cartItems.length !== 0) {
-          localStorage.cartItems = JSON.stringify([
-            ...state.cartItems,
-            cartItems,
-          ]);
+          localStorage.cartItems = JSON.stringify([state_cartItems, cartItems]);
         } else {
           localStorage.cartItems = [JSON.stringify(cartItems)];
         }
@@ -115,7 +120,7 @@ const storeReducer = (state = defaultState, action) => {
         toast("success", "Item Added to cart");
         return {
           ...state,
-          cartItems: [...state.cartItems, cartItems],
+          cartItems: [state_cartItems, cartItems],
           total: newTotal,
         };
       }
