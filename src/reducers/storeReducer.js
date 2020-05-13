@@ -79,15 +79,10 @@ const storeReducer = (state = defaultState, action) => {
     case ADD_TO_CART: {
       let cartItems = state.items.find((item) => item.uuid === action.uuid);
 
-      let existed_item = null;
-
-      if (state.cartItems && state.cartItems.length > 0) {
-        //check if the action id exists in the cartItems
-        let existed_item = state.cartItems.find(
-          (item) => action.uuid === item.uuid
-        );
-      }
-
+      //check if the action id exists in the cartItems
+      let existed_item = state.cartItems.find(
+        (item) => action.uuid === item.uuid
+      );
       if (existed_item) {
         existed_item.quantity += 1;
         localStorage.cartItems = [JSON.stringify(state.cartItems)];
@@ -108,7 +103,7 @@ const storeReducer = (state = defaultState, action) => {
             cartItems,
           ]);
         } else {
-          localStorage.cartItems = [JSON.stringify(cartItems)];
+          localStorage.cartItems = JSON.stringify([cartItems]);
         }
 
         localStorage.total = newTotal;
